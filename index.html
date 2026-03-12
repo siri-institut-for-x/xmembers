@@ -234,17 +234,8 @@ form {
 
     <div class="field">
       <label>Upload Logo</label>
-      <span class="field-note">SVG or PNG without background please :) — If you already sent your logo to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccbfa5bea58ca5a2bfb8a5b8b9b8aaa3beb4e2a8a7">[email&#160;protected]</a> you can skip this.</span>
-      <div class="upload-zone" id="uploadZone">
-        <input type="file" id="logoFile" name="logoFile" accept=".svg,.png">
-        <span class="upload-label">Click to upload or drag &amp; drop</span>
-        <span class="upload-sub">SVG or PNG — max 5 MB</span>
-      </div>
-      <div class="upload-preview" id="uploadPreview">
-        <img class="upload-preview-img" id="previewImg" src="" alt="">
-        <span id="previewName"></span>
-        <button type="button" class="upload-remove" id="removeFile">Remove</button>
-      </div>
+      <span class="field-note">SVG or PNG without background please :) — If you already sent your logo to siri&#64;institutforx.dk you can skip this.</span>
+      <a href="https://drive.google.com/drive/folders/1EenPHEWYDR7fEE9VjgwJ4BV72y8N1yMo" target="_blank" style="display:block;width:100%;margin-top:0.4rem;padding:1.1rem;background:var(--black);color:var(--yellow);font-family:var(--font);font-size:1rem;font-weight:550;letter-spacing:-0.005em;text-align:center;text-decoration:none;transition:opacity 0.18s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">UPLOAD YOUR LOGO TO THIS DRIVE FOLDER →</a>
     </div>
 
     <div>
@@ -252,55 +243,16 @@ form {
     </div>
 
   </form>
-  <p style="margin-top:2.5rem;font-size:0.95rem;font-weight:400;letter-spacing:-0.003em;opacity:0.6;">Any questions? Write me on <a href="/cdn-cgi/l/email-protection#1d6e746f745d74736e69746968697b726f65337976" style="color:var(--black);"><span class="__cf_email__" data-cfemail="4b382239220b2225383f223f3e3f2d243933652f20">[email&#160;protected]</span></a></p>
+  <p style="margin-top:2.5rem;font-size:0.95rem;font-weight:400;letter-spacing:-0.003em;opacity:0.6;">Any questions? Write me on <a href="mailto:siri&#64;institutforx.dk" style="color:var(--black);">siri&#64;institutforx.dk</a></p>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Character counter
 var descField   = document.getElementById('description');
 var charCounter = document.getElementById('charCounter');
 descField.addEventListener('input', function() {
   descField.value = descField.value.slice(0, 300);
   charCounter.textContent = descField.value.length + ' / 300';
-});
-
-// Logo upload
-var uploadZone    = document.getElementById('uploadZone');
-var logoFile      = document.getElementById('logoFile');
-var uploadPreview = document.getElementById('uploadPreview');
-var previewImg    = document.getElementById('previewImg');
-var previewName   = document.getElementById('previewName');
-
-logoFile.addEventListener('change', handleFile);
-uploadZone.addEventListener('dragover',  function(e) { e.preventDefault(); uploadZone.classList.add('drag-over'); });
-uploadZone.addEventListener('dragleave', function()  { uploadZone.classList.remove('drag-over'); });
-uploadZone.addEventListener('drop', function(e) {
-  e.preventDefault();
-  uploadZone.classList.remove('drag-over');
-  if (e.dataTransfer.files.length) { logoFile.files = e.dataTransfer.files; handleFile(); }
-});
-
-function handleFile() {
-  var file = logoFile.files[0];
-  if (!file) return;
-  if (file.type !== 'image/svg+xml' && file.type !== 'image/png') { showStatus('Please upload an SVG or PNG file.', 'error'); return; }
-  if (file.size > 5 * 1024 * 1024) { showStatus('File must be under 5 MB.', 'error'); return; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    previewImg.src = e.target.result;
-    previewName.textContent = file.name;
-    uploadPreview.classList.add('visible');
-    uploadZone.style.display = 'none';
-  };
-  reader.readAsDataURL(file);
-}
-
-document.getElementById('removeFile').addEventListener('click', function() {
-  logoFile.value = '';
-  previewImg.src = '';
-  previewName.textContent = '';
-  uploadPreview.classList.remove('visible');
-  uploadZone.style.display = '';
 });
 
 function showStatus(msg, type) {
@@ -319,32 +271,25 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Sending…';
+
   var formData = new FormData();
   formData.append('Member Name',    document.getElementById('memberName').value.trim());
   formData.append('Public Contact', document.getElementById('publicContact').value.trim());
   formData.append('Website',        document.getElementById('websiteLink').value.trim());
   formData.append('Social Media',   document.getElementById('someLink').value.trim());
   formData.append('Description',    document.getElementById('description').value.trim());
-  if (logoFile.files[0]) formData.append('Logo', logoFile.files[0]);
 
   fetch('https://script.google.com/macros/s/AKfycbw6sSI9up5D21HXpuKP7UlftLuWLia6JyIy1BQMvLUDUe7D-deX8j5XJulNks4pzRWW/exec', {
     method: 'POST',
     body: formData,
-    headers: { 'Accept': 'application/json' }
+    mode: 'no-cors'
   })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.ok) {
-        document.querySelector('.page').innerHTML =
-          '<div style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;text-align:center;">' +
-          '<svg width="48" height="48" viewBox="0 0 445 445" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M353.262 332.679L345.342 340.599L355.404 350.661L363.324 342.742L353.262 332.679Z" fill="black"/><path d="M326.354 305.752L305.296 326.81L315.359 336.872L336.416 315.814L326.354 305.752Z" fill="black"/><path d="M324.33 222.27C324.33 221.31 324.71 220.38 325.39 219.7L444.54 100.55L343.98 0L224.83 119.15C224.15 119.83 223.23 120.21 222.26 120.21C221.29 120.21 220.37 119.83 219.69 119.15L100.56 0L0 100.56L119.15 219.71C119.83 220.39 120.21 221.31 120.21 222.28C120.21 223.25 119.83 224.17 119.15 224.85L0 343.98L100.56 444.54L219.71 325.39C220.39 324.71 221.31 324.33 222.28 324.33C223.25 324.33 224.17 324.71 224.85 325.39L344 444.54L444.56 343.98L325.41 224.83C324.73 224.15 324.35 223.23 324.35 222.26L324.33 222.27Z" fill="black"/></svg>' +
-          '<p style="font-size:1rem;font-weight:550;letter-spacing:-0.005em;">Thank you</p>' +
-          '</div>';
-      } else {
-        showStatus('Something went wrong. Please try again.', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Submit →';
-      }
+    .then(function() {
+      document.querySelector('.page').innerHTML =
+        '<div style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;text-align:center;">' +
+        '<svg width="48" height="48" viewBox="0 0 445 445" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M353.262 332.679L345.342 340.599L355.404 350.661L363.324 342.742L353.262 332.679Z" fill="black"/><path d="M326.354 305.752L305.296 326.81L315.359 336.872L336.416 315.814L326.354 305.752Z" fill="black"/><path d="M324.33 222.27C324.33 221.31 324.71 220.38 325.39 219.7L444.54 100.55L343.98 0L224.83 119.15C224.15 119.83 223.23 120.21 222.26 120.21C221.29 120.21 220.37 119.83 219.69 119.15L100.56 0L0 100.56L119.15 219.71C119.83 220.39 120.21 221.31 120.21 222.28C120.21 223.25 119.83 224.17 119.15 224.85L0 343.98L100.56 444.54L219.71 325.39C220.39 324.71 221.31 324.33 222.28 324.33C223.25 324.33 224.17 324.71 224.85 325.39L344 444.54L444.56 343.98L325.41 224.83C324.73 224.15 324.35 223.23 324.35 222.26L324.33 222.27Z" fill="black"/></svg>' +
+        '<p style="font-size:1rem;font-weight:550;letter-spacing:-0.005em;">Thank you</p>' +
+        '</div>';
     })
     .catch(function() {
       showStatus('Could not reach the server. Please try again.', 'error');
