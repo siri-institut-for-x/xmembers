@@ -272,55 +272,36 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
   btn.disabled = true;
   btn.textContent = 'Sending…';
 
-  function doSubmit(logoData, logoName, logoMime) {
-    var formData = new FormData();
-    formData.append('Member Name',    document.getElementById('memberName').value.trim());
-    formData.append('Public Contact', document.getElementById('publicContact').value.trim());
-    formData.append('Website',        document.getElementById('websiteLink').value.trim());
-    formData.append('Social Media',   document.getElementById('someLink').value.trim());
-    formData.append('Description',    document.getElementById('description').value.trim());
-    if (logoData) {
-      formData.append('LogoData', logoData);
-      formData.append('LogoName', logoName);
-      formData.append('LogoMime', logoMime);
-    }
+  var formData = new FormData();
+  formData.append('Member Name',    document.getElementById('memberName').value.trim());
+  formData.append('Public Contact', document.getElementById('publicContact').value.trim());
+  formData.append('Website',        document.getElementById('websiteLink').value.trim());
+  formData.append('Social Media',   document.getElementById('someLink').value.trim());
+  formData.append('Description',    document.getElementById('description').value.trim());
 
-    fetch('https://script.google.com/macros/s/AKfycbw6sSI9up5D21HXpuKP7UlftLuWLia6JyIy1BQMvLUDUe7D-deX8j5XJulNks4pzRWW/exec', {
-      method: 'POST',
-      body: formData
-    })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.ok) {
-          document.querySelector('.page').innerHTML =
-            '<div style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;text-align:center;">' +
-            '<svg width="48" height="48" viewBox="0 0 445 445" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M353.262 332.679L345.342 340.599L355.404 350.661L363.324 342.742L353.262 332.679Z" fill="black"/><path d="M326.354 305.752L305.296 326.81L315.359 336.872L336.416 315.814L326.354 305.752Z" fill="black"/><path d="M324.33 222.27C324.33 221.31 324.71 220.38 325.39 219.7L444.54 100.55L343.98 0L224.83 119.15C224.15 119.83 223.23 120.21 222.26 120.21C221.29 120.21 220.37 119.83 219.69 119.15L100.56 0L0 100.56L119.15 219.71C119.83 220.39 120.21 221.31 120.21 222.28C120.21 223.25 119.83 224.17 119.15 224.85L0 343.98L100.56 444.54L219.71 325.39C220.39 324.71 221.31 324.33 222.28 324.33C223.25 324.33 224.17 324.71 224.85 325.39L344 444.54L444.56 343.98L325.41 224.83C324.73 224.15 324.35 223.23 324.35 222.26L324.33 222.27Z" fill="black"/></svg>' +
-            '<p style="font-size:1rem;font-weight:550;letter-spacing:-0.005em;">Thank you</p>' +
-            '</div>';
-        } else {
-          showStatus('Something went wrong. Please try again.', 'error');
-          btn.disabled = false;
-          btn.textContent = 'Submit →';
-        }
-      })
-      .catch(function() {
-        showStatus('Could not reach the server. Please try again.', 'error');
+  fetch('https://script.google.com/macros/s/AKfycbwjJ3EuLRdkKOlW2r08KK_Z03ZoB74nPnu3FTRxx9YJ5ajrpejHbB9jk47_VOACvZc-/exec', {
+    method: 'POST',
+    body: formData
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        document.querySelector('.page').innerHTML =
+          '<div style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;text-align:center;">' +
+          '<svg width="48" height="48" viewBox="0 0 445 445" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M353.262 332.679L345.342 340.599L355.404 350.661L363.324 342.742L353.262 332.679Z" fill="black"/><path d="M326.354 305.752L305.296 326.81L315.359 336.872L336.416 315.814L326.354 305.752Z" fill="black"/><path d="M324.33 222.27C324.33 221.31 324.71 220.38 325.39 219.7L444.54 100.55L343.98 0L224.83 119.15C224.15 119.83 223.23 120.21 222.26 120.21C221.29 120.21 220.37 119.83 219.69 119.15L100.56 0L0 100.56L119.15 219.71C119.83 220.39 120.21 221.31 120.21 222.28C120.21 223.25 119.83 224.17 119.15 224.85L0 343.98L100.56 444.54L219.71 325.39C220.39 324.71 221.31 324.33 222.28 324.33C223.25 324.33 224.17 324.71 224.85 325.39L344 444.54L444.56 343.98L325.41 224.83C324.73 224.15 324.35 223.23 324.35 222.26L324.33 222.27Z" fill="black"/></svg>' +
+          '<p style="font-size:1rem;font-weight:550;letter-spacing:-0.005em;">Thank you</p>' +
+          '</div>';
+      } else {
+        showStatus('Something went wrong. Please try again.', 'error');
         btn.disabled = false;
         btn.textContent = 'Submit →';
-      });
-  }
-
-  var file = logoFile.files[0];
-  if (file) {
-    var reader = new FileReader();
-    reader.onload = function(ev) {
-      var base64 = ev.target.result.split(',')[1];
-      doSubmit(base64, file.name, file.type);
-    };
-    reader.readAsDataURL(file);
-  } else {
-    doSubmit(null, null, null);
-  }
+      }
+    })
+    .catch(function() {
+      showStatus('Could not reach the server. Please try again.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Submit →';
+    });
 });
 </script>
 
