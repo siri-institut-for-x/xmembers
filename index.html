@@ -205,15 +205,15 @@ form {
   <form id="memberForm" novalidate>
 
     <div class="field">
-      <label for="memberName">Member Name *</label>
+      <label for="memberName">Member Name</label>
       <span class="field-note">You can write your personal name if you don't have an Association / Organisation / Company / Community name</span>
-      <input type="text" id="memberName" name="memberName" required>
+      <input type="text" id="memberName" name="memberName">
     </div>
 
     <div class="field">
-      <label for="publicContact">Public Contact *</label>
+      <label for="publicContact">Public Contact</label>
       <span class="field-note">Email or Phone Number</span>
-      <input type="text" id="publicContact" name="publicContact" required>
+      <input type="text" id="publicContact" name="publicContact">
     </div>
 
     <div class="field">
@@ -234,8 +234,13 @@ form {
 
     <div class="field">
       <label>Upload Logo</label>
-      <span class="field-note">SVG or PNG without background please :) — If you already sent your logo to siri&#64;institutforx.dk you can skip this.</span>
+      <span class="field-note">SVG or PNG without background please :)</span>
+      <span class="field-note" style="opacity:1;font-weight:550;margin-top:0.2rem;">Already sent your logo to siri&#64;institutforx.dk? You can skip this.</span>
       <a href="https://drive.google.com/drive/folders/1EenPHEWYDR7fEE9VjgwJ4BV72y8N1yMo" target="_blank" style="display:block;width:100%;margin-top:0.4rem;padding:1.1rem;background:var(--black);color:var(--yellow);font-family:var(--font);font-size:1rem;font-weight:550;letter-spacing:-0.005em;text-align:center;text-decoration:none;transition:opacity 0.18s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">UPLOAD YOUR LOGO TO THIS DRIVE FOLDER →</a>
+      <label style="display:flex;align-items:center;gap:0.5rem;margin-top:0.6rem;cursor:pointer;font-weight:400;font-size:0.95rem;">
+        <input type="checkbox" id="logoUploaded" name="Logo uploaded" style="width:16px;height:16px;cursor:pointer;accent-color:var(--black);">
+        Logo uploaded
+      </label>
     </div>
 
     <div>
@@ -264,10 +269,6 @@ function showStatus(msg, type) {
 // Submit
 document.getElementById('memberForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  if (!document.getElementById('memberName').value.trim() || !document.getElementById('publicContact').value.trim()) {
-    showStatus('Please fill in Member Name and Public Contact.', 'error');
-    return;
-  }
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Sending…';
@@ -278,6 +279,7 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
   formData.append('Website',        document.getElementById('websiteLink').value.trim());
   formData.append('Social Media',   document.getElementById('someLink').value.trim());
   formData.append('Description',    document.getElementById('description').value.trim());
+  formData.append('Logo uploaded',  document.getElementById('logoUploaded').checked ? 'Yes' : 'No');
 
   fetch('https://script.google.com/macros/s/AKfycbwjJ3EuLRdkKOlW2r08KK_Z03ZoB74nPnu3FTRxx9YJ5ajrpejHbB9jk47_VOACvZc-/exec', {
     method: 'POST',
