@@ -327,7 +327,7 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
   formData.append('Description',    document.getElementById('description').value.trim());
   if (logoFile.files[0]) formData.append('Logo', logoFile.files[0]);
 
-  fetch('https://script.google.com/macros/s/AKfycbwjJ3EuLRdkKOlW2r08KK_Z03ZoB74nPnu3FTRxx9YJ5ajrpejHbB9jk47_VOACvZc-/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbw6sSI9up5D21HXpuKP7UlftLuWLia6JyIy1BQMvLUDUe7D-deX8j5XJulNks4pzRWW/exec', {
     method: 'POST',
     body: formData,
     headers: { 'Accept': 'application/json' }
