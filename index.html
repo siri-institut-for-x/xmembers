@@ -281,7 +281,7 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
   formData.append('Description',    document.getElementById('description').value.trim());
   formData.append('Logo uploaded',  document.getElementById('logoUploaded').checked ? 'Yes' : 'No');
 
-  fetch('https://script.google.com/macros/s/AKfycbwjJ3EuLRdkKOlW2r08KK_Z03ZoB74nPnu3FTRxx9YJ5ajrpejHbB9jk47_VOACvZc-/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbzGV0ctaVGmBUN-NP7faFb54yp7DsZjYl_7AlRsp1DWBlnX87x8GOd7yoiYbR-D4scx/exec', {
     method: 'POST',
     body: formData
   })
