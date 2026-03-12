@@ -234,7 +234,7 @@ form {
 
     <div class="field">
       <label>Upload Logo</label>
-      <span class="field-note">SVG or PNG without background please :) — If you already sent your logo to siri@institutforx.dk you can skip this.</span>
+      <span class="field-note">SVG or PNG without background please :) — If you already sent your logo to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccbfa5bea58ca5a2bfb8a5b8b9b8aaa3beb4e2a8a7">[email&#160;protected]</a> you can skip this.</span>
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="logoFile" name="logoFile" accept=".svg,.png">
         <span class="upload-label">Click to upload or drag &amp; drop</span>
@@ -252,11 +252,11 @@ form {
     </div>
 
   </form>
-  <p style="margin-top:2.5rem;font-size:0.95rem;font-weight:400;letter-spacing:-0.003em;opacity:0.6;">Any questions? Write me on <a href="mailto:siri@institutforx.dk" style="color:var(--black);">siri@institutforx.dk</a></p>
+  <p style="margin-top:2.5rem;font-size:0.95rem;font-weight:400;letter-spacing:-0.003em;opacity:0.6;">Any questions? Write me on <a href="/cdn-cgi/l/email-protection#1d6e746f745d74736e69746968697b726f65337976" style="color:var(--black);"><span class="__cf_email__" data-cfemail="4b382239220b2225383f223f3e3f2d243933652f20">[email&#160;protected]</span></a></p>
 </div>
 
-<script>
-var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL';
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+var FORMSPREE_ID = 'xaqpjyqz';
 
 // Character counter
 var descField   = document.getElementById('description');
@@ -318,76 +318,42 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
     showStatus('Please fill in Member Name and Public Contact.', 'error');
     return;
   }
-  if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL') {
-    showStatus('Setup needed: replace YOUR_APPS_SCRIPT_URL with your Google Apps Script URL.', 'error');
+  if (FORMSPREE_ID === 'YOUR_FORMSPREE_ID') {
+    showStatus('Setup needed: replace YOUR_FORMSPREE_ID with your Formspree form ID.', 'error');
     return;
   }
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Sending…';
   var formData = new FormData();
-  formData.append('memberName',    document.getElementById('memberName').value.trim());
-  formData.append('publicContact', document.getElementById('publicContact').value.trim());
-  formData.append('websiteLink',   document.getElementById('websiteLink').value.trim());
-  formData.append('someLink',      document.getElementById('someLink').value.trim());
-  formData.append('description',   document.getElementById('description').value.trim());
-  if (logoFile.files[0]) formData.append('logo', logoFile.files[0]);
+  formData.append('Member Name',    document.getElementById('memberName').value.trim());
+  formData.append('Public Contact', document.getElementById('publicContact').value.trim());
+  formData.append('Website',        document.getElementById('websiteLink').value.trim());
+  formData.append('Social Media',   document.getElementById('someLink').value.trim());
+  formData.append('Description',    document.getElementById('description').value.trim());
+  if (logoFile.files[0]) formData.append('Logo', logoFile.files[0]);
 
-  fetch(APPS_SCRIPT_URL, { method: 'POST', body: formData })
+  fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      if (data.result === 'success') {
+      if (data.ok) {
         showStatus('Registration received — we\'ll be in touch shortly.', 'success');
         document.getElementById('memberForm').reset();
         uploadPreview.classList.remove('visible');
         uploadZone.style.display = '';
         charCounter.textContent = '0 / 300';
       } else {
-        showStatus('Something went wrong: ' + (data.error || 'unknown error'), 'error');
+        showStatus('Something went wrong. Please try again.', 'error');
       }
     })
     .catch(function() { showStatus('Could not reach the server. Please try again.', 'error'); })
     .finally(function() { btn.disabled = false; btn.textContent = 'Submit →'; });
 });
 </script>
-
-<!--
-==============================================
-GOOGLE APPS SCRIPT — script.google.com
-Deploy as web app: execute as Me, anyone can access
-==============================================
-
-function doPost(e) {
-  try {
-    var folder = DriveApp.getFolderById('YOUR_GOOGLE_DRIVE_FOLDER_ID');
-
-    var memberName    = e.parameter.memberName    || '';
-    var publicContact = e.parameter.publicContact || '';
-    var websiteLink   = e.parameter.websiteLink   || '';
-    var description   = e.parameter.description   || '';
-
-    var logoUrl = '';
-    if (e.parameters.logo) {
-      var file = folder.createFile(e.parameters.logo[0]);
-      file.setName(memberName + '_logo_' + Date.now());
-      logoUrl = file.getUrl();
-    }
-
-    // Optional: log to a Sheet
-    // SpreadsheetApp.openById('SHEET_ID').getActiveSheet()
-    //   .appendRow([new Date(), memberName, publicContact, websiteLink, description, logoUrl]);
-
-    return ContentService
-      .createTextOutput(JSON.stringify({ result: 'success' }))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch(err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ result: 'error', error: err.message }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-==============================================
--->
 
 </body>
 </html>
